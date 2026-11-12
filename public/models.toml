@@ -1,0 +1,13 @@
+[deepseek-flash]
+name = "DeepSeek V4.1 Flash 1017"
+input = 1.0
+output = 4.0
+cache-read = 0.02
+cache-write = 0.0
+
+[deepseek-v4-pro]
+name = "DeepSeek V4 Pro"
+input = 4.5
+output = 13.5
+cache-read = 0.15
+cache-write = 0.0
