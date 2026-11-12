@@ -20,8 +20,5 @@ export default defineConfig({
       prefixedOnly: true,
     }),
   ],
-  transformers: [
-    transformerVariantGroup(),
-    transformerAttributifyJsx(),
-  ],
+  transformers: [transformerVariantGroup(), transformerAttributifyJsx()],
 });
