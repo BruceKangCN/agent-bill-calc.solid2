@@ -4,7 +4,6 @@ import { getInitialThemeIsDark, applyTheme } from "./theme";
 export default function ThemeToggle() {
   const [isDark, setIsDark] = createSignal(getInitialThemeIsDark());
   const theme = () => (isDark() ? "dark" : "light");
-  const icon = () => `i-lucide-${isDark() ? "sun" : "moon"}`;
 
   createEffect(isDark, (value) => applyTheme(value));
 
@@ -39,7 +38,7 @@ export default function ThemeToggle() {
     >
       <span
         aria-hidden="true"
-        class={icon()}
+        class={isDark() ? "i-lucide-sun" : "i-lucide-moon"}
         un-h="5 w-5 sm:(h-6 w-6)"
         un-shrink="0"
       />
