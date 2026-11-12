@@ -3,12 +3,10 @@ import { getInitialThemeIsDark, applyTheme } from "./theme";
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = createSignal(getInitialThemeIsDark());
-  const theme = () => isDark() ? "dark" : "light";
+  const theme = () => (isDark() ? "dark" : "light");
+  const icon = () => `i-lucide-${isDark() ? "sun" : "moon"}`;
 
-  createEffect(
-    isDark,
-    (value) => applyTheme(value),
-  );
+  createEffect(isDark, (value) => applyTheme(value));
 
   const toggleTheme = () => {
     setIsDark((b) => !b);
@@ -33,18 +31,18 @@ export default function ThemeToggle() {
       un-shrink="0"
       un-rounded="xl"
       un-border="~ zinc-300 dark:zinc-600"
-      un-bg="white hover:zinc-50 dark:zinc-700 dark:hover:zinc-600"
-      un-text="zinc-600 hover:indigo-600 dark:zinc-300 dark:hover:indigo-400"
-      un-ring="focus-visible:2 focus-visible:indigo-500/40 dark:focus-visible:indigo-400/40"
+      un-bg="white hover:zinc-50 dark:(zinc-700 hover:zinc-600)"
+      un-text="zinc-600 hover:indigo-600 dark:(zinc-300 hover:indigo-400)"
+      un-ring="focus-visible:(2 indigo-500/40 dark:indigo-400/40)"
       un-transition="colors"
       un-cursor="pointer"
     >
       <span
         aria-hidden="true"
-        class={isDark() ? "i-lucide-sun" : "i-lucide-moon"}
-        un-h="5 w-5 sm:h-6 sm:w-6"
+        class={icon()}
+        un-h="5 w-5 sm:(h-6 w-6)"
         un-shrink="0"
       />
     </button>
-  )
+  );
 }

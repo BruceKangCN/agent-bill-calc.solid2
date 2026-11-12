@@ -14,7 +14,7 @@ export const ModelTable = type({
 });
 
 export const fetchModels = async () => {
-  const resp = await fetch("/models.toml");
+  const resp = await fetch("./models.toml");
   const content = await resp.text();
   const data = parse(content);
   const models = ModelTable.assert(data);

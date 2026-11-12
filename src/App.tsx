@@ -1,7 +1,8 @@
 import { createMemo, createSignal, For } from "solid-js";
 import { fetchModels } from "./model";
-import NumberField from "./NumberField";
 import ThemeToggle from "./ThemeToggle";
+import NumberField from "./NumberField";
+import ToggleGroup from "./ToggleGroup";
 import "virtual:uno.css";
 
 export default function App() {
@@ -68,15 +69,14 @@ export default function App() {
         un-mx="auto"
         un-mt="8"
         un-max-w="4xl"
-        un-grid="~ cols-6"
-        un-gap="x-3 y-5 sm:x-4 sm:y-6"
+        un-flex="~ col"
+        un-gap="5 sm:6"
         un-rounded="2xl sm:3xl"
         un-border="~ zinc-200 dark:zinc-600"
         un-bg="white dark:zinc-700"
         un-p="5 sm:8"
       >
         <select
-          un-col-span="6"
           un-w="full"
           un-h="12 sm:16"
           un-rounded="xl"
@@ -96,55 +96,27 @@ export default function App() {
           </For>
         </select>
 
-        <For each={["-", "k", "M"]}>
-          {(u) => (
-            <label
-              un-col-span="2"
-              un-flex="~"
-              un-items="center"
-              un-justify="center"
-              un-h="12 sm:16"
-              un-rounded="xl"
-              un-border="~ zinc-300 has-[:checked]:zinc-400 dark:zinc-600 dark:has-[:checked]:zinc-500"
-              un-bg="zinc-50 has-[:checked]:zinc-200 dark:zinc-800 dark:has-[:checked]:zinc-600"
-              un-text="lg sm:2xl zinc-500 has-[:checked]:zinc-900 dark:zinc-300 dark:has-[:checked]:zinc-50"
-              un-font="semibold"
-              un-cursor="pointer"
-              un-ring="has-[:focus-visible]:2 has-[:focus-visible]:indigo-500/50 dark:has-[:focus-visible]:indigo-400/60"
-              un-transition="colors"
-            >
-              <input
-                type="radio"
-                name="unit"
-                checked={unit() === u}
-                onClick={() => setUnit(u)}
-                un-w="0"
-                un-h="0"
-                un-m="0"
-                un-p="0"
-                un-opacity="0"
-                un-appearance="none"
-              />
-              <span>{u}</span>
-            </label>
-          )}
-        </For>
-
-        <NumberField label="输入" value={input()} onInput={setInput} />
-
-        <NumberField label="输出" value={output()} onInput={setOutput} />
-
-        <NumberField
-          label="缓存读取"
-          value={cacheRead()}
-          onInput={setCacheRead}
+        <ToggleGroup
+          value={unit()}
+          options={["-", "k", "M"]}
+          onChange={setUnit}
+          name="unit"
         />
 
-        <NumberField
-          label="缓存写入"
-          value={cacheWrite()}
-          onInput={setCacheWrite}
-        />
+        <section un-grid="~ cols-1 sm:cols-2" un-gap="3 sm:4">
+          <NumberField label="输入" value={input()} onInput={setInput} />
+          <NumberField label="输出" value={output()} onInput={setOutput} />
+          <NumberField
+            label="缓存读取"
+            value={cacheRead()}
+            onInput={setCacheRead}
+          />
+          <NumberField
+            label="缓存写入"
+            value={cacheWrite()}
+            onInput={setCacheWrite}
+          />
+        </section>
       </form>
 
       <section
@@ -167,7 +139,6 @@ export default function App() {
           un-text="5xl sm:6xl"
           un-font="bold"
           un-leading="none"
-          un-tracking="tight"
         >
           {total().toFixed(2)}
         </strong>
