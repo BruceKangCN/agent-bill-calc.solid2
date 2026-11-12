@@ -1,63 +1,11 @@
-import { createEffect, createMemo, createSignal, For } from "solid-js";
-import { parse } from "smol-toml";
-import { applyTheme, getInitialThemeIsDark } from "./theme";
-import { ModelTable } from "./model";
+import { createMemo, createSignal, For } from "solid-js";
+import { fetchModels } from "./model";
+import NumberField from "./NumberField";
+import ThemeToggle from "./ThemeToggle";
 import "virtual:uno.css";
-
-interface NumberFieldProps {
-  label: string;
-  value: number;
-  onInput: (value: number) => void;
-};
-
-function NumberField(props: NumberFieldProps) {
-  return (
-    <label
-      un-col-span="6 sm:3"
-      un-flex="~ col"
-      un-gap="2"
-      un-min-w="0"
-      un-text="lg sm:2xl zinc-600 dark:zinc-300"
-    >
-      <span>{props.label}</span>
-      <input
-        type="number"
-        un-w="full"
-        un-h="12 sm:16"
-        un-rounded="xl"
-        un-border="~ zinc-300 focus:indigo-500 dark:zinc-600 dark:focus:indigo-400"
-        un-bg="zinc-50 dark:zinc-800"
-        un-px="4 sm:6"
-        un-text="right lg sm:2xl zinc-900 dark:zinc-100"
-        un-outline="none"
-        un-ring="focus:2 focus:indigo-500/30 dark:focus:indigo-400/40"
-        un-transition="colors"
-        value={props.value}
-        onInput={(e) => props.onInput(parseFloat(e.currentTarget.value))}
-      />
-    </label>
-  );
-}
 
 export default function App() {
   const models = createMemo(() => fetchModels());
-
-  const [isDark, setIsDark] = createSignal(getInitialThemeIsDark());
-  const theme = () => isDark() ? "dark" : "light";
-
-  createEffect(
-    isDark,
-    (value) => applyTheme(value),
-  );
-
-  const toggleTheme = () => {
-    setIsDark((b) => !b);
-    try {
-      window.localStorage.setItem("theme", theme());
-    } catch {
-      // Ignore storage errors (for example in privacy mode).
-    }
-  };
 
   const [selectedKey, setKey] = createSignal(() => Object.keys(models())[0]);
   const [unit, setUnit] = createSignal("-");
@@ -113,31 +61,7 @@ export default function App() {
         >
           词元费用计算器
         </h1>
-        <button
-          type="button"
-          aria-label={isDark() ? "切换到亮色主题" : "切换到暗色主题"}
-          onClick={toggleTheme}
-          un-flex="~"
-          un-items="center"
-          un-justify="center"
-          un-h="12 sm:16"
-          un-w="12 sm:16"
-          un-shrink="0"
-          un-rounded="xl"
-          un-border="~ zinc-300 dark:zinc-600"
-          un-bg="white hover:zinc-50 dark:zinc-700 dark:hover:zinc-600"
-          un-text="zinc-600 hover:indigo-600 dark:zinc-300 dark:hover:indigo-400"
-          un-ring="focus-visible:2 focus-visible:indigo-500/40 dark:focus-visible:indigo-400/40"
-          un-transition="colors"
-          un-cursor="pointer"
-        >
-          <span
-            aria-hidden="true"
-            class={isDark() ? "i-lucide-sun" : "i-lucide-moon"}
-            un-h="5 w-5 sm:h-6 sm:w-6"
-            un-shrink="0"
-          />
-        </button>
+        <ThemeToggle />
       </header>
 
       <form
@@ -251,12 +175,3 @@ export default function App() {
     </main>
   );
 }
-
-const fetchModels = async () => {
-  const resp = await fetch("/models.toml");
-  const content = await resp.text();
-  const data = parse(content);
-  const models = ModelTable.assert(data);
-
-  return models;
-};

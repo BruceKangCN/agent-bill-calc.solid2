@@ -1,4 +1,5 @@
 import { type } from "arktype";
+import { parse } from "smol-toml";
 
 export const Model = type({
   name: type.string,
@@ -11,3 +12,12 @@ export const Model = type({
 export const ModelTable = type({
   "[string]": Model,
 });
+
+export const fetchModels = async () => {
+  const resp = await fetch("/models.toml");
+  const content = await resp.text();
+  const data = parse(content);
+  const models = ModelTable.assert(data);
+
+  return models;
+};
