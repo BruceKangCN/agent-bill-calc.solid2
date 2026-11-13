@@ -41,6 +41,8 @@ export default function ThemeToggle() {
     >
       <span
         aria-hidden="true"
+        // NOTE: DO NOT dynamically concat class names! UnoCSS need to see the
+        // full names at compile time.
         class={isDark() ? "i-lucide-sun" : "i-lucide-moon"}
         un-h="5 w-5 sm:(h-6 w-6)"
         un-shrink="0"
