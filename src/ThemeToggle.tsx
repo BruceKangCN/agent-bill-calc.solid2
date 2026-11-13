@@ -1,17 +1,20 @@
-import { createEffect, createSignal, flush } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { getInitialThemeIsDark, applyTheme } from "./theme";
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = createSignal(getInitialThemeIsDark());
-  const theme = () => (isDark() ? "dark" : "light");
 
   createEffect(isDark, (value) => applyTheme(value));
 
   const toggleTheme = () => {
-    setIsDark((b) => !b);
-    flush();
+    // HACK: Compute the expected value rather than read. Updates are staged and
+    // they don't take effect immediately. A call to isDark will not get the
+    // expected value but the stale one.
+    const expectedIsDark = !isDark();
+    setIsDark(expectedIsDark);
+    const theme = expectedIsDark ? "dark" : "light";
     try {
-      window.localStorage.setItem("theme", theme());
+      window.localStorage.setItem("theme", theme);
     } catch {
       // Ignore storage errors (for example in privacy mode).
     }
