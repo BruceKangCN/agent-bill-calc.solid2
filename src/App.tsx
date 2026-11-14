@@ -80,8 +80,8 @@ export default function App() {
           un-w="full"
           un-h="12 sm:16"
           un-rounded="xl"
-          un-border="~ zinc-300 focus:indigo-500 dark:zinc-600 dark:focus:indigo-400"
-          un-bg="zinc-50 hover:zinc-100 dark:zinc-600 dark:hover:zinc-500"
+          un-border="~ zinc-300 focus:indigo-500 dark:(zinc-600 focus:indigo-400)"
+          un-bg="zinc-50 hover:zinc-100 dark:(zinc-600 hover:zinc-500)"
           un-px="4 sm:6"
           un-text="lg sm:2xl zinc-900 dark:zinc-100"
           un-outline="none"
@@ -91,8 +91,8 @@ export default function App() {
           value={selectedKey()}
           onChange={(e) => setKey(e.currentTarget.value)}
         >
-          <For each={Object.keys(models())}>
-            {(key: string) => <option value={key}>{models()[key].name}</option>}
+          <For each={Object.entries(models())}>
+            {([key, value]) => <option value={key}>{value.name}</option>}
           </For>
         </select>
 
